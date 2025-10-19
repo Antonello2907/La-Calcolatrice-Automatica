@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatrice Estrazioni - Sistema Privato</title>
+    <style>
+        :root {
+            --colore-primario: #2c3e50;
+            --colore-secondario: #34495e;
+            --colore-accento: #e74c3c;
+            --colore-testo: #ecf0f1;
+            --colore-successo: #27ae60;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--colore-primario), var(--colore-secondario));
+            color: var(--colore-testo);
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--colore-testo);
+            font-size: 2rem;
+        }
+
+        .orologio {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .sezione-inserimento {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .gruppo-input {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .numero-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--colore-primario);
+        }
+
+        .numero-input:focus {
+            border-color: var(--colore-accento);
+            outline: none;
+        }
+
+        .controlli {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-salva {
+            background: var(--colore-successo);
+            color: white;
+        }
+
+        .btn-salva:hover {
+            background: #219652;
+        }
+
+        .btn-reset {
+            background: var(--colore-accento);
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #c0392b;
+        }
+
+        .sezione-risultati {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .risultato-title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .numeri-predetti {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .numero-predetto {
+            padding: 20px;
+            font-size: 1.3rem;
+            text-align: center;
+            background: var(--colore-successo);
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .info-sistema {
+            margin-top: 20px;
+            text-align: center;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .gruppo-input, .numeri-predetti {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CALCOLATRICE ESTRAZIONI</h1>
+        
+        <div class="orologio" id="orologio">
+            ORA CORRENTE: <span id="ora-esatta">--:--:--</span>
+        </div>
+
+        <div class="sezione-inserimento">
+            <h3>INSERISCI NUMERI ESTRATTI</h3>
+            <div class="gruppo-input">
+                <input type="number" class="numero-input" placeholder="1" min="0" max="99">
+                <input type="number" class="numero-input" placeholder="2" min="0" max="99">
+                <input type="number" class="numero-input" placeholder="3" min="0" max="99">
+                <input type="number" class="numero-input" placeholder="4" min="0" max="99">
+                <input type="number" class="numero-input" placeholder="5" min="0" max="99">
+                <input type="number" class="numero-input" placeholder="6" min="0" max="99">
+                <input type="number" class="numero-input" placeholder="7" min="0" max="99">
+                <input type="number" class="numero-input" placeholder="8" min="0" max="99">
+                <input type="number" class="numero-input" placeholder="9" min="0" max="99">
+                <input type="number" class="numero-input" placeholder="10" min="0" max="99">
+            </div>
+            
+            <div class="controlli">
+                <button class="btn btn-salva">SALVA ESTRAZIONE</button>
+                <button class="btn btn-reset">AZZERA CAMPI</button>
+            </div>
+        </div>
+
+        <div class="sezione-risultati">
+            <div class="risultato-title">NUMERI PREDETTI PROSSIMA ESTRAZIONE</div>
+            <div class="numeri-predetti">
+                <div class="numero-predetto">--</div>
+                <div class="numero-predetto">--</div>
+                <div class="numero-predetto">--</div>
+                <div class="numero-predetto">--</div>
+                <div class="numero-predetto">--</div>
+                <div class="numero-predetto">--</div>
+                <div class="numero-predetto">--</div>
+                <div class="numero-predetto">--</div>
+                <div class="numero-predetto">--</div>
+                <div class="numero-predetto">--</div>
+            </div>
+        </div>
+
+        <div class="info-sistema">
+            Sistema privato - Calcolo automatico medie ponderate
+        </div>
+    </div>
+
+    <script>
+        // OROLOGIO IN TEMPO REALE
+        function aggiornaOrologio() {
+            const ora = new Date();
+            const ore = ora.getHours().toString().padStart(2, '0');
+            const minuti = ora.getMinutes().toString().padStart(2, '0');
+            const secondi = ora.getSeconds().toString().padStart(2, '0');
+            document.getElementById('ora-esatta').textContent = `${ore}:${minuti}:${secondi}`;
+        }
+        
+        setInterval(aggiornaOrologio, 1000);
+        aggiornaOrologio();
+
+        // SIMULAZIONE CALCOLO (per demo)
+        document.querySelector('.btn-salva').addEventListener('click', function() {
+            // Qui andrà la logica di calcolo reale
+            const numeriPredetti = document.querySelectorAll('.numero-predetto');
+            numeriPredetti.forEach(cella => {
+                cella.textContent = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+                cella.style.background = '#e74c3c';
+            });
+            
+            alert('Estrazione salvata! Calcolo effettuato.');
+        });
+
+        // RESET CAMPI
+        document.querySelector('.btn-reset').addEventListener('click', function() {
+            document.querySelectorAll('.numero-input').forEach(input => {
+                input.value = '';
+            });
+        });
+    </script>
+</body>
+</html>
