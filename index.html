@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcolatrice Estrazioni - Sistema Privato</title>
+    <title>Sistema Win for Life - Analisi Estrazioni</title>
     <style>
         :root {
-            --colore-primario: #2c3e50;
-            --colore-secondario: #34495e;
-            --colore-accento: #e74c3c;
-            --colore-testo: #ecf0f1;
-            --colore-successo: #27ae60;
+            --colore-primario: #1e3a8a;
+            --colore-secondario: #3b82f6;
+            --colore-accento: #ef4444;
+            --colore-successo: #10b981;
+            --colore-testo: #f8fafc;
+            --colore-sfondo: #0f172a;
         }
 
         * {
@@ -21,65 +22,106 @@
         }
 
         body {
-            background: linear-gradient(135deg, var(--colore-primario), var(--colore-secondario));
+            background: linear-gradient(135deg, var(--colore-sfondo), #1e293b);
             color: var(--colore-testo);
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
             padding: 30px;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        h1 {
+        .header {
             text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--colore-primario), var(--colore-secondario));
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .header .sottotitolo {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .orologio-sistema {
+            text-align: center;
+            font-size: 1.3rem;
             margin-bottom: 30px;
-            color: var(--colore-testo);
-            font-size: 2rem;
-        }
-
-        .orologio {
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
             background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sezione-inserimento {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .controlli-data-ora {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.2);
             padding: 20px;
             border-radius: 10px;
-            margin-bottom: 30px;
         }
 
-        .intestazione-data {
+        .gruppo-data, .gruppo-ora {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .data-ora-corrente {
-            font-size: 1.2rem;
+        .label-importante {
+            font-size: 1.1rem;
             font-weight: bold;
+            color: var(--colore-successo);
         }
 
-        .gruppo-input {
+        .display-data-ora {
+            font-size: 1.3rem;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-orario {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-style: italic;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        .gruppo-input-numeri {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .casella-numero {
@@ -90,299 +132,586 @@
 
         .numero-input {
             width: 100%;
-            padding: 15px;
-            font-size: 1.2rem;
+            padding: 18px;
+            font-size: 1.3rem;
             text-align: center;
             border: 2px solid transparent;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--colore-primario);
-            margin-bottom: 5px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--colore-sfondo);
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
         .numero-input:focus {
-            border-color: var(--colore-accento);
+            border-color: var(--colore-successo);
             outline: none;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .numero-input::placeholder {
+            color: #64748b;
+            font-weight: normal;
         }
 
         .etichetta-numero {
             font-size: 0.9rem;
+            margin-top: 5px;
             opacity: 0.8;
         }
 
-        .controlli {
+        .controlli-principali {
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-top: 25px;
+            margin-top: 30px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 12px 30px;
+            padding: 15px 35px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
+            min-width: 180px;
         }
 
         .btn-salva {
-            background: var(--colore-successo);
+            background: linear-gradient(135deg, var(--colore-successo), #059669);
             color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
 
         .btn-salva:hover {
-            background: #219652;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
         .btn-reset {
-            background: var(--colore-accento);
+            background: linear-gradient(135deg, var(--colore-accento), #dc2626);
             color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
         }
 
         .btn-reset:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, var(--colore-secondario), #2563eb);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-export:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .storico-azioni {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border-left: 4px solid var(--colore-successo);
         }
 
         .sezione-risultati {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .risultato-title {
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            color: var(--colore-testo);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            color: var(--colore-successo);
         }
 
-        .numeri-predetti {
+        .combinazione-predetta {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
+            margin-bottom: 30px;
         }
 
         .numero-predetto {
-            padding: 20px;
-            font-size: 1.3rem;
+            padding: 25px;
+            font-size: 1.4rem;
             text-align: center;
-            background: var(--colore-successo);
+            background: linear-gradient(135deg, var(--colore-successo), #059669);
             color: white;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
+
+        .sezione-statistiche {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .box-statistica {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .box-statistica h4 {
+            color: var(--colore-secondario);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .lista-numeri {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .numero-stat {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .caldo { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .freddo { background: linear-gradient(135deg, #3b82f6, #2563eb); }
 
         .info-sistema {
-            margin-top: 25px;
+            margin-top: 40px;
             text-align: center;
-            font-style: italic;
-            opacity: 0.8;
+            opacity: 0.7;
             font-size: 0.9rem;
-        }
-
-        .storico-azioni {
-            margin-top: 20px;
-            padding: 15px;
+            padding: 20px;
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            font-size: 0.9rem;
+            border-radius: 10px;
         }
 
         @media (max-width: 768px) {
-            .gruppo-input, .numeri-predetti {
+            .gruppo-input-numeri, .combinazione-predetta {
                 grid-template-columns: repeat(2, 1fr);
             }
             
-            .container {
-                padding: 15px;
+            .controlli-data-ora {
+                grid-template-columns: 1fr;
             }
             
-            .intestazione-data {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
+            .sezione-statistiche {
+                grid-template-columns: 1fr;
             }
+            
+            .controlli-principali {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--colore-successo);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>CALCOLATRICE ESTRAZIONI</h1>
+        <div class="header">
+            <h1>WIN FOR LIFE</h1>
+            <p class="sottotitolo">Sistema di Analisi e Predizione Estrazioni</p>
+        </div>
         
-        <div class="orologio" id="orologio">
-            ORA CORRENTE: <span id="ora-esatta">--:--:--</span>
+        <div class="orologio-sistema">
+            ⏰ ORA CORRENTE: <span id="ora-esatta">--:--:--</span> | 
+            📅 DATA: <span id="data-corrente">--/--/----</span>
         </div>
 
         <div class="sezione-inserimento">
-            <div class="intestazione-data">
-                <div class="data-ora-corrente">
-                    DATA: <span id="data-corrente">--/--/----</span>
+            <h2>INSERIMENTO ESTRAZIONE</h2>
+            <p style="text-align: center; margin-bottom: 20px; opacity: 0.8;">
+                Estrazioni dalle 7:00 alle 23:00 - Numeri da 1 a 20
+            </p>
+
+            <div class="controlli-data-ora">
+                <div class="gruppo-data">
+                    <span class="label-importante">📅 DATA ESTRAZIONE</span>
+                    <div class="display-data-ora" id="display-data">--/--/----</div>
                 </div>
-                <div class="data-ora-corrente">
-                    ORA: <span id="ora-corrente">--:--</span>
+                
+                <div class="gruppo-ora">
+                    <span class="label-importante">⏰ ORA ESTRAZIONE</span>
+                    <div class="display-data-ora" id="display-ora">--:--</div>
+                </div>
+                
+                <div class="info-orario">
+                    Prossima estrazione: <span id="prossima-estrazione">--:--</span>
                 </div>
             </div>
 
-            <h3>INSERISCI NUMERI ESTRATTI</h3>
-            <div class="gruppo-input">
+            <h3>INSERISCI I 10 NUMERI ESTRATTI (1-20)</h3>
+            <div class="gruppo-input-numeri">
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="1" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="1" min="1" max="20" id="num1">
                     <span class="etichetta-numero">Numero 1</span>
                 </div>
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="2" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="2" min="1" max="20" id="num2">
                     <span class="etichetta-numero">Numero 2</span>
                 </div>
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="3" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="3" min="1" max="20" id="num3">
                     <span class="etichetta-numero">Numero 3</span>
                 </div>
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="4" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="4" min="1" max="20" id="num4">
                     <span class="etichetta-numero">Numero 4</span>
                 </div>
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="5" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="5" min="1" max="20" id="num5">
                     <span class="etichetta-numero">Numero 5</span>
                 </div>
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="6" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="6" min="1" max="20" id="num6">
                     <span class="etichetta-numero">Numero 6</span>
                 </div>
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="7" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="7" min="1" max="20" id="num7">
                     <span class="etichetta-numero">Numero 7</span>
                 </div>
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="8" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="8" min="1" max="20" id="num8">
                     <span class="etichetta-numero">Numero 8</span>
                 </div>
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="9" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="9" min="1" max="20" id="num9">
                     <span class="etichetta-numero">Numero 9</span>
                 </div>
                 <div class="casella-numero">
-                    <input type="number" class="numero-input" placeholder="10" min="0" max="99">
+                    <input type="number" class="numero-input" placeholder="10" min="1" max="20" id="num10">
                     <span class="etichetta-numero">Numero 10</span>
                 </div>
             </div>
             
-            <div class="controlli">
-                <button class="btn btn-salva">SALVA ESTRAZIONE</button>
-                <button class="btn btn-reset">AZZERA CAMPI</button>
+            <div class="controlli-principali">
+                <button class="btn btn-salva" id="btn-salva">💾 SALVA ESTRAZIONE</button>
+                <button class="btn btn-reset" id="btn-reset">🔄 AZZERA CAMPI</button>
+                <button class="btn btn-export" id="btn-export">📊 GENERA REPORT</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Elaborazione in corso...</p>
             </div>
 
             <div class="storico-azioni" id="storico-azioni">
-                Ultima estrazione salvata: Nessuna
+                <strong>Ultima estrazione salvata:</strong> <span id="ultimo-salvataggio">Nessuna</span>
             </div>
         </div>
 
         <div class="sezione-risultati">
-            <div class="risultato-title">NUMERI PREDETTI PROSSIMA ESTRAZIONE</div>
-            <div class="numeri-predetti">
-                <div class="numero-predetto">--</div>
-                <div class="numero-predetto">--</div>
-                <div class="numero-predetto">--</div>
-                <div class="numero-predetto">--</div>
-                <div class="numero-predetto">--</div>
-                <div class="numero-predetto">--</div>
-                <div class="numero-predetto">--</div>
-                <div class="numero-predetto">--</div>
-                <div class="numero-predetto">--</div>
-                <div class="numero-predetto">--</div>
+            <div class="risultato-title">🎯 COMBINAZIONE PREDETTA PROSSIMA ESTRAZIONE</div>
+            <div class="combinazione-predetta">
+                <div class="numero-predetto" id="pred1">--</div>
+                <div class="numero-predetto" id="pred2">--</div>
+                <div class="numero-predetto" id="pred3">--</div>
+                <div class="numero-predetto" id="pred4">--</div>
+                <div class="numero-predetto" id="pred5">--</div>
+                <div class="numero-predetto" id="pred6">--</div>
+                <div class="numero-predetto" id="pred7">--</div>
+                <div class="numero-predetto" id="pred8">--</div>
+                <div class="numero-predetto" id="pred9">--</div>
+                <div class="numero-predetto" id="pred10">--</div>
+            </div>
+
+            <div class="sezione-statistiche">
+                <div class="box-statistica">
+                    <h4>🔥 NUMERI CALDI</h4>
+                    <div class="lista-numeri" id="numeri-caldi">
+                        <span class="numero-stat caldo">--</span>
+                    </div>
+                </div>
+                
+                <div class="box-statistica">
+                    <h4>❄️ NUMERI FREDDI</h4>
+                    <div class="lista-numeri" id="numeri-freddi">
+                        <span class="numero-stat freddo">--</span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="info-sistema">
-            Sistema privato - Data/Ora automatica - Calcolo medie ponderate
+            ⚠️ Sistema privato - Uso personale - Win for Life 1-20<br>
+            Estrazioni: 7:00 - 23:00 - Calcolo automatico medie ponderate
         </div>
     </div>
 
     <script>
+        // VARIABILI GLOBALI
+        let ultimaOraSalvata = null;
+        const ORA_INIZIO = 7;
+        const ORA_FINE = 23;
+
+        // INIZIALIZZAZIONE
+        document.addEventListener('DOMContentLoaded', function() {
+            aggiornaOrologio();
+            impostaProssimaEstrazione();
+            document.getElementById('num1').focus();
+        });
+
         // OROLOGIO IN TEMPO REALE
         function aggiornaOrologio() {
             const ora = new Date();
             const ore = ora.getHours().toString().padStart(2, '0');
             const minuti = ora.getMinutes().toString().padStart(2, '0');
             const secondi = ora.getSeconds().toString().padStart(2, '0');
+            
             document.getElementById('ora-esatta').textContent = `${ore}:${minuti}:${secondi}`;
             
-            // Aggiorna data e ora per l'inserimento
+            // Data corrente
             const giorno = ora.getDate().toString().padStart(2, '0');
             const mese = (ora.getMonth() + 1).toString().padStart(2, '0');
             const anno = ora.getFullYear();
             document.getElementById('data-corrente').textContent = `${giorno}/${mese}/${anno}`;
-            document.getElementById('ora-corrente').textContent = `${ore}:${minuti}`;
         }
         
         setInterval(aggiornaOrologio, 1000);
-        aggiornaOrologio();
+
+        // IMPOSTA PROSSIMA ESTRAZIONE
+        function impostaProssimaEstrazione() {
+            const ora = new Date();
+            let oraCorrente = ora.getHours();
+            let minutiCorrenti = ora.getMinutes();
+            
+            let prossimaOra = oraCorrente;
+            let prossimiMinuti = minutiCorrenti;
+            
+            // Se siamo fuori dall'orario delle estrazioni, imposta la prima del giorno dopo
+            if (oraCorrente < ORA_INIZIO) {
+                prossimaOra = ORA_INIZIO;
+                prossimiMinuti = 0;
+            } else if (oraCorrente >= ORA_FINE) {
+                // Domani alle 7:00
+                prossimaOra = ORA_INIZIO;
+                prossimiMinuti = 0;
+            } else {
+                // Calcola la prossima estrazione (ogni ora)
+                prossimaOra = oraCorrente;
+                prossimiMinuti = 0;
+            }
+            
+            document.getElementById('display-data').textContent = 
+                document.getElementById('data-corrente').textContent;
+            document.getElementById('display-ora').textContent = 
+                `${prossimaOra.toString().padStart(2, '0')}:${prossimiMinuti.toString().padStart(2, '0')}`;
+            document.getElementById('prossima-estrazione').textContent = 
+                `${prossimaOra.toString().padStart(2, '0')}:${prossimiMinuti.toString().padStart(2, '0')}`;
+            
+            ultimaOraSalvata = prossimaOra;
+        }
 
         // SALVATAGGIO ESTRAZIONE
-        document.querySelector('.btn-salva').addEventListener('click', function() {
+        document.getElementById('btn-salva').addEventListener('click', function() {
             const inputs = document.querySelectorAll('.numero-input');
             let tuttiPieni = true;
             let numeriInseriti = [];
+            let numeriValidi = true;
             
-            // Verifica che tutti i campi siano pieni
+            // Verifica che tutti i campi siano pieni e validi
             inputs.forEach(input => {
                 if (!input.value) {
                     tuttiPieni = false;
                 } else {
-                    numeriInseriti.push(input.value.padStart(2, '0'));
+                    const num = parseInt(input.value);
+                    if (num < 1 || num > 20) {
+                        numeriValidi = false;
+                        input.style.borderColor = 'red';
+                    } else {
+                        input.style.borderColor = '';
+                        numeriInseriti.push(num);
+                    }
                 }
             });
             
             if (!tuttiPieni) {
-                alert('Per favore, inserisci tutti i 10 numeri prima di salvare.');
+                alert('❌ Per favore, inserisci tutti i 10 numeri prima di salvare.');
                 return;
             }
             
-            // Simula calcolo numeri predetti
-            const numeriPredetti = document.querySelectorAll('.numero-predetto');
-            numeriPredetti.forEach(cella => {
-                const numeroCasuale = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-                cella.textContent = numeroCasuale;
-                cella.style.background = '#e74c3c';
-            });
+            if (!numeriValidi) {
+                alert('❌ Alcuni numeri non sono validi. Inserisci solo numeri da 1 a 20.');
+                return;
+            }
             
-            // Aggiorna storico
-            const ora = new Date();
-            const dataOraSalvataggio = `${ora.getDate()}/${ora.getMonth() + 1}/${ora.getFullYear()} ${ora.getHours().toString().padStart(2, '0')}:${ora.getMinutes().toString().padStart(2, '0')}`;
-            document.getElementById('storico-azioni').textContent = 
-                `Ultima estrazione salvata: ${dataOraSalvataggio} - Numeri: ${numeriInseriti.join(', ')}`;
+            // Mostra loading
+            document.getElementById('loading').style.display = 'block';
             
-            // Resetta i campi per il prossimo inserimento
-            inputs.forEach(input => {
-                input.value = '';
-            });
-            
-            // Aggiorna automaticamente data/ora per il prossimo inserimento
-            setTimeout(aggiornaOrologio, 100);
-            
-            alert('Estrazione salvata con successo! Calcolo effettuato. Campi resettati per prossimo inserimento.');
+            // Simula elaborazione (nel sistema reale qui chiameresti Python)
+            setTimeout(() => {
+                // Simula calcolo numeri predetti
+                const numeriPredetti = generaNumeriPredetti();
+                aggiornaRisultati(numeriPredetti);
+                
+                // Aggiorna storico
+                const ora = new Date();
+                const dataOraSalvataggio = 
+                    `${ora.getDate()}/${ora.getMonth() + 1}/${ora.getFullYear()} ${ora.getHours().toString().padStart(2, '0')}:${ora.getMinutes().toString().padStart(2, '0')}`;
+                
+                document.getElementById('ultimo-salvataggio').textContent = 
+                    `${dataOraSalvataggio} - Numeri: ${numeriInseriti.join(', ')}`;
+                
+                // Resetta i campi per il prossimo inserimento
+                inputs.forEach(input => {
+                    input.value = '';
+                });
+                
+                // Aggiorna automaticamente data/ora per il prossimo inserimento
+                aggiornaProssimaEstrazione();
+                
+                // Nascondi loading
+                document.getElementById('loading').style.display = 'none';
+                
+                alert('✅ Estrazione salvata con successo! Calcolo effettuato.\nCampi resettati per prossimo inserimento.');
+                
+                // Rimetti focus sul primo campo
+                document.getElementById('num1').focus();
+                
+            }, 1500);
         });
+
+        // GENERA NUMERI PREDETTI (SIMULAZIONE)
+        function generaNumeriPredetti() {
+            const numeri = [];
+            while (numeri.length < 10) {
+                const num = Math.floor(Math.random() * 20) + 1;
+                if (!numeri.includes(num)) {
+                    numeri.push(num);
+                }
+            }
+            return numeri.sort((a, b) => a - b);
+        }
+
+        // AGGIORNA RISULTATI
+        function aggiornaRisultati(numeriPredetti) {
+            // Aggiorna combinazione predetta
+            for (let i = 0; i < 10; i++) {
+                document.getElementById(`pred${i + 1}`).textContent = 
+                    numeriPredetti[i].toString().padStart(2, '0');
+            }
+            
+            // Simula numeri caldi/freddi
+            const numeriCaldi = generaNumeriCasuali(5, 1, 20);
+            const numeriFreddi = generaNumeriCasuali(5, 1, 20);
+            
+            aggiornaListaNumeri('numeri-caldi', numeriCaldi, 'caldo');
+            aggiornaListaNumeri('numeri-freddi', numeriFreddi, 'freddo');
+        }
+
+        function generaNumeriCasuali(quantita, min, max) {
+            const numeri = [];
+            while (numeri.length < quantita) {
+                const num = Math.floor(Math.random() * (max - min + 1)) + min;
+                if (!numeri.includes(num)) {
+                    numeri.push(num);
+                }
+            }
+            return numeri;
+        }
+
+        function aggiornaListaNumeri(elementId, numeri, classe) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+            numeri.forEach(num => {
+                const span = document.createElement('span');
+                span.className = `numero-stat ${classe}`;
+                span.textContent = num.toString().padStart(2, '0');
+                container.appendChild(span);
+            });
+        }
+
+        // AGGIORNA PROSSIMA ESTRAZIONE DOPO SALVATAGGIO
+        function aggiornaProssimaEstrazione() {
+            let prossimaOra = ultimaOraSalvata + 1;
+            
+            // Se superiamo le 23, torniamo alle 7 del giorno dopo
+            if (prossimaOra > ORA_FINE) {
+                prossimaOra = ORA_INIZIO;
+                // Qui andrebbe aggiornata anche la data
+            }
+            
+            document.getElementById('display-ora').textContent = 
+                `${prossimaOra.toString().padStart(2, '0')}:00`;
+            document.getElementById('prossima-estrazione').textContent = 
+                `${prossimaOra.toString().padStart(2, '0')}:00`;
+            
+            ultimaOraSalvata = prossimaOra;
+        }
 
         // RESET CAMPI
-        document.querySelector('.btn-reset').addEventListener('click', function() {
+        document.getElementById('btn-reset').addEventListener('click', function() {
             document.querySelectorAll('.numero-input').forEach(input => {
                 input.value = '';
+                input.style.borderColor = '';
             });
-            document.getElementById('storico-azioni').textContent = 'Ultima estrazione salvata: Nessuna';
+            document.getElementById('ultimo-salvataggio').textContent = 'Nessuna';
+            document.getElementById('num1').focus();
         });
 
-        // Auto-focus sul primo campo al caricamento
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.numero-input').focus();
+        // ESPORTA REPORT
+        document.getElementById('btn-export').addEventListener('click', function() {
+            alert('📊 Funzione di export report sarà integrata con Python\n(Genera file Excel e report statistici)');
+        });
+
+        // AUTO-FOCUS E NAVIGAZIONE CON TAB
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const inputs = document.querySelectorAll('.numero-input');
+                const currentInput = document.activeElement;
+                const currentIndex = Array.from(inputs).indexOf(currentInput);
+                
+                if (currentIndex < inputs.length - 1) {
+                    inputs[currentIndex + 1].focus();
+                    e.preventDefault();
+                } else {
+                    document.getElementById('btn-salva').focus();
+                    e.preventDefault();
+                }
+            }
         });
     </script>
 </body>
 </html>
-
-
